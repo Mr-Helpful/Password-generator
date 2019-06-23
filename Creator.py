@@ -108,6 +108,9 @@ class markovGraph:
         # finds the relevant node for the start character
         startNode = self.nodes[startChar]
 
+    def chooseFrom(self,node):
+        
+
 newGraph = markovGraph("Input text")
 newGraph.getNodes()
 print(newGraph.noUniqueWords())
