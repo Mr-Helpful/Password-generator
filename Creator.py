@@ -108,8 +108,21 @@ class markovGraph:
         # finds the relevant node for the start character
         startNode = self.nodes[startChar]
 
+        outString = ""
+        for i in range(length):
+            
+
     def chooseFrom(self,node):
-        
+        # fetches all the connected nodes for the given node
+        keys = node.edges.keys()
+
+        # generates a related probability table for the nodes
+        probs = [node.edges[key] for key in keys]
+
+        # performs a weighted choice of 1 item on the edges list
+        choice = npr.choice(keys, 1, p = probs)[0]
+
+        return(choice)
 
 newGraph = markovGraph("Input text")
 newGraph.getNodes()
