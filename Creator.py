@@ -106,27 +106,38 @@ class markovGraph:
         startChar = ". "
 
         # finds the relevant node for the start character
-        startNode = self.nodes[startChar]
+        Node = self.nodes[startChar]
 
+        # initialises an output string to be filled by the program
         outString = ""
-        for i in range(length):
-            
+
+        # generates a phrase of length specified by the user * 2 as this will ensure roughly the length the user specified in words comes up
+        for i in range(length*2):
+
+            # uses the chooseFrom method to randomly pick a new node from the previous node's children
+            Node = self.chooseFrom(Node)
+
+            # adds the selected node's value to the output string
+            outString += Node.value
+
+        return(outString)
 
     def chooseFrom(self,node):
         # fetches all the connected nodes for the given node
-        keys = node.edges.keys()
+        keys = list(node.edges.keys())
 
         # generates a related probability table for the nodes
         probs = [node.edges[key] for key in keys]
 
         # performs a weighted choice of 1 item on the edges list
-        choice = npr.choice(keys, 1, p = probs)[0]
+        choice = self.nodes[npr.choice(keys, 1, p = probs)[0]]
 
         return(choice)
 
 newGraph = markovGraph("Input text")
 newGraph.getNodes()
 print(newGraph.noUniqueWords())
+print(newGraph.generateText(8))
 
 
 # allows for weighted choice on a list
