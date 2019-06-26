@@ -23,7 +23,7 @@ class markovGraph:
 
     def readFile(self,fileName):
         # opens the text file and reads it
-        with open(fileName,"r") as f:
+        with open(fileName,"r",encoding = "ISO-8859-1") as f:
             text = f.read()
 
         # formats the text given by splitting it based on words
@@ -135,8 +135,8 @@ class markovGraph:
 
 newGraph = markovGraph("Input text")
 newGraph.getNodes()
-print(newGraph.noUniqueWords())
-print(newGraph.generateText(50))
+#print(newGraph.noUniqueWords())
+print(newGraph.generateText(100))
 
 
 # allows for weighted choice on a list
