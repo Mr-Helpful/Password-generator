@@ -53,33 +53,32 @@ class markovGraph:
 
     # uses two words to create new connection in the graph
     def translatePair(self,word1,word2):
+        # if word1 doesn't exist
+        if(not(word1 in self.nodes.keys())):
 
-        # if the node for the first word already exists
-        if(word1 in self.nodes.keys()):
+            # it creates it in Nodes
+            self.nodes[word1] = markovNode(word1)
 
-            # it navigates to the node
-            node = self.nodes[word1]
-            nodeDict = node.edges
+        # if word2 doesn't exist
+        if(not(word2 in self.nodes.keys())):
 
-            # if the word already exists in the node's dictionary
-            if(word2 in nodeDict.keys()):
+            # it creates it in Nodes
+            self.nodes[word2] = markovNode(word2)
 
-                # it adds 1 to its frequency
-                nodeDict[word2] += 1
-            else:
+        Node1 = self.nodes[word1]
 
-                # otherwise it creates a new index with frequency 1
-                nodeDict[word1] = 1
+        Node2 = self.nodes[word2]
+
+        # if Node2 already exists in the frequency table of Node1
+        if(Node2 in Node1.edges.keys()):
+
+            # it justs adds 1 to its value
+            Node1.edges[Node2] += 1
 
         else:
-            # otherwise it creates a whole new node instance
-            newNode = markovNode(word1)
 
-            # assumes it doesn't have the second word already in its edges
-            newNode.edges[word2] = 1
-
-            # and adds the node instance to the dictionary of nodes
-            self.nodes[word1] = newNode
+            # otherwise it adds an entry with frequency 1
+            Node1.edges[Node2] = 1
 
     # edits all nodes to use probabilities instead of frequencies
     def updateProbabilities(self):
@@ -91,7 +90,7 @@ class markovGraph:
         D = node.edges
         total = sum(D.values())
         for K in D.keys():
-            D[K] = round(D[K] / total,3)
+            D[K] = D[K] / total
 
     def getNodes(self):
         return(self.nodes)
@@ -130,14 +129,14 @@ class markovGraph:
         probs = [node.edges[key] for key in keys]
 
         # performs a weighted choice of 1 item on the edges list
-        choice = self.nodes[npr.choice(keys, 1, p = probs)[0]]
+        choice = npr.choice(keys, 1, p = probs)[0]
 
         return(choice)
 
 newGraph = markovGraph("Input text")
 newGraph.getNodes()
 print(newGraph.noUniqueWords())
-print(newGraph.generateText(8))
+print(newGraph.generateText(50))
 
 
 # allows for weighted choice on a list
