@@ -33,7 +33,7 @@ class markovGraph:
     def splitText(self,text):
 
         # sets out the format for recognising words using regex
-        wordFormat = "(\!\n|\,\n|\.\n|\"\n|\'\n|\.\.\.\n|\?\n|\! |\, |\. |\" |\' |\.\.\. |\? )"
+        wordFormat = "(\W(?:\!\n|\,\n|\.\n|\"\n|\'\n|\.\.\.\n|\?\n|\! |\, |\. |\" |\' |\.\.\. |\? | ))"
 
         # uses the format to split up the text
         parts = list(re.split(wordFormat,text))
@@ -133,11 +133,8 @@ class markovGraph:
 
         return(choice)
 
-newGraph = markovGraph("Input text")
-newGraph.getNodes()
-#print(newGraph.noUniqueWords())
-print(newGraph.generateText(100))
-
-
-# allows for weighted choice on a list
-# use npr.choice(values to pick, 1, p = probability distribution)[0]
+if(__name__ == "__main__"):
+    newGraph = markovGraph("Input text")
+    newGraph.getNodes()
+    #print(newGraph.noUniqueWords())
+    print(newGraph.generateText(100))
