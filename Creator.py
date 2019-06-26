@@ -33,7 +33,7 @@ class markovGraph:
     def splitText(self,text):
 
         # sets out the format for recognising words using regex
-        wordFormat = r"(\W+)"
+        wordFormat = "(\!\n|\,\n|\.\n|\"\n|\'\n|\.\.\.\n|\?\n|\! |\, |\. |\" |\' |\.\.\. |\? )"
 
         # uses the format to split up the text
         parts = list(re.split(wordFormat,text))
