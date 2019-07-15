@@ -4,7 +4,7 @@ import numpy.random as npr
 class markovNode:
     def __init__(self,value):
         self.value = value
-        self.edges = {}
+        self.nodes = {}
 
 class markovGraph:
     def __init__(self,fileName):
@@ -22,8 +22,8 @@ class markovGraph:
         self.updateProbabilities()
 
     def readFile(self,fileName):
-        # opens the text file and reads it
-        with open(fileName,"r",encoding = "ISO-8859-1") as f:
+        # opens the text file and reads it
+        with open(fileName,"r") as f:
             text = f.read()
 
         # formats the text given by splitting it based on words
@@ -33,7 +33,7 @@ class markovGraph:
     def splitText(self,text):
 
         # sets out the format for recognising words using regex
-        wordFormat = "(\W(?:\,|\.|\'|\"|\!|\?| |\n)+)"
+        wordFormat = r"(?:[^\w'])"
 
         # uses the format to split up the text
         parts = list(re.split(wordFormat,text))
@@ -70,15 +70,15 @@ class markovGraph:
         Node2 = self.nodes[word2]
 
         # if Node2 already exists in the frequency table of Node1
-        if(Node2 in Node1.edges.keys()):
+        if(Node2 in Node1.nodes.keys()):
 
             # it justs adds 1 to its value
-            Node1.edges[Node2] += 1
+            Node1.nodes[Node2] += 1
 
         else:
 
             # otherwise it adds an entry with frequency 1
-            Node1.edges[Node2] = 1
+            Node1.nodes[Node2] = 1
 
     # edits all nodes to use probabilities instead of frequencies
     def updateProbabilities(self):
@@ -87,7 +87,7 @@ class markovGraph:
 
     # changes a single node to have probability instead of frequency
     def updateNode(self,node):
-        D = node.edges
+        D = node.nodes
         total = sum(D.values())
         for K in D.keys():
             D[K] = D[K] / total
@@ -102,7 +102,7 @@ class markovGraph:
     def generateText(self,length):
 
         # this is commonly a character used before a new sentance
-        startChar = ". "
+        startChar = npr.choice(self.nodes.keys(), 1)[0]
 
         # finds the relevant node for the start character
         Node = self.nodes[startChar]
@@ -123,18 +123,21 @@ class markovGraph:
 
     def chooseFrom(self,node):
         # fetches all the connected nodes for the given node
-        keys = list(node.edges.keys())
+        keys = list(node.nodes.keys())
 
         # generates a related probability table for the nodes
-        probs = [node.edges[key] for key in keys]
+        probs = [node.nodes[key] for key in keys]
 
-        # performs a weighted choice of 1 item on the edges list
+        # performs a weighted choice of 1 item on the nodes list
         choice = npr.choice(keys, 1, p = probs)[0]
 
         return(choice)
 
-if(__name__ == "__main__"):
-    newGraph = markovGraph("Input text")
-    newGraph.getNodes()
-    #print(newGraph.noUniqueWords())
-    print(newGraph.generateText(100))
+newGraph = markovGraph("Input text")
+newGraph.getNodes()
+print(newGraph.noUniqueWords())
+print(newGraph.generateText(50))
+
+
+# allows for weighted choice on a list
+# use npr.choice(values to pick, 1, p = probability distribution)[0]
